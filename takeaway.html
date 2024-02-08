@@ -1,0 +1,828 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>h5外卖</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/c/font_3991423_7mob4sgg4lk.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/navs.css">
+    <link rel="stylesheet" href="./css/cart.css">
+	<link rel="stylesheet" href="./css/main.css">
+    <style>
+        /* 像素比为2: 一个css像素可以容纳4个位图像素  */
+        /* 像素比为3: 一个css像素可以容纳9个位图像素  */
+        #wrap{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+
+            position: relative;
+			display: flex;
+			flex-direction: column;
+        }
+    </style>
+	<script src="./js/core.min.js"></script>
+  <!-- <script src="https://unpkg.com/@better-scroll/core@latest/dist/core.js"></script> -->
+    <script>
+        //控制mask的显示与隐藏
+        function switchMask(){
+            //获取头部的两个向右箭头
+            var btns = document.querySelectorAll(".header .icon-anniu-jiantouxiangyou");
+            //获取遮罩
+            var mask = document.querySelector(".header > .mask")
+            //获取遮罩中的关闭按钮
+            var close = document.querySelector(".header > .mask .close")
+            for(var i=0;i<btns.length;i++){
+                //给每一个向右箭头加点击事件
+                btns[i].onclick=function(){
+                    //显示遮罩 操作元素的内联样式
+                    mask.style.display = "flex";
+                    //每次打开遮罩时,遮罩需要滚动最顶部
+                    mask.scroll(0,0)
+                }
+            }
+
+            //给关闭按钮加点击事件
+            close.onclick=function(){
+                //隐藏遮罩 操作元素的内联样式
+                mask.style.display = "none"
+            }
+        }
+        //导航切换
+        function switchTap(){
+          //获取三个导航
+          var goods = document.querySelector(".navs > .goods");
+          var ratings = document.querySelector(".navs > .ratings");
+          var shop = document.querySelector(".navs > .shop");
+          //获取三个导航对应的内容
+          var main_goods = document.querySelector(".main > .goods");
+          var main_ratings = document.querySelector(".main > .ratings");
+          var main_shop = document.querySelector(".main > .shop");
+          
+          //给三个导航加点击事件 点击时要控制selected的切换
+          goods.onclick=function(){
+              ratings.style.color = ""
+              shop.style.color = ""
+              main_ratings.style.display = "none"
+              main_shop.style.display = "none"
+          
+              goods.style.color="rgba(240, 20, 20)"
+              main_goods.style.display="flex"
+          };
+          ratings.onclick=function(){
+              goods.style.color = "";
+              shop.style.color = "";
+              main_goods.style.display = "none"
+              main_shop.style.display = "none"
+          
+              ratings.style.color="rgba(240, 20, 20)"
+              main_ratings.style.display="flex"
+
+              var bottom=document.querySelector(".main> .ratings> .bottom");
+              new BScroll(bottom,{})
+          };
+          shop.onclick=function(){
+              goods.style.color = "";
+              ratings.style.color = ""
+              main_goods.style.display = "none"
+              main_ratings.style.display = "none"
+          
+              shop.style.color = "rgba(240, 20, 20)"
+              main_shop.style.display = "block"
+
+              var shopnode=document.querySelector(".main >.shop")
+              new BScroll(shopnode,{})
+          };
+        }
+        //购物车明细区域的切换
+        function switchCart(){
+			var cart = document.querySelector(".cart > .left .cart_icon");
+			var cart_mask = document.querySelector(".cart_mask");
+			var cart_scroll = document.querySelector(".cart_mask > .content .scroll");
+			var flag = true;
+			cart.onclick = function(){
+				if(flag){
+					cart_mask.style.display = "flex";
+					flag=false;
+					//滚动条在最顶部
+					cart_scroll.scroll(0,0)
+				}else{
+					cart_mask.style.display = "none";
+					flag=true;
+				}
+			}
+		}
+       
+		//onload事件是在页面加载完毕之后才会触发
+        window.onload=function(){
+            switchMask()
+			      switchTap()
+            switchCart()
+			
+            //主体列表区域的滑动
+            var goodsLeft = document.querySelector(".main > .goods > .left");
+            var goodsRight = document.querySelector(".main > .goods > .right");
+            new BScroll(goodsLeft, {})
+            new BScroll(goodsRight, {})
+        }
+    </script>
+</head>
+<body>
+    <div id="wrap">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="content">
+                <div class="content_avator"></div>
+                <div class="content_info">
+                    <div class="info_title">
+                        <div class="title_img"></div>
+                        <span>粥品香坊(大运村)</span>
+                    </div>
+                    <div class="info_dispatch">
+                        <span>蜂鸟专送/38分钟到达</span>
+                    </div>
+                    <div class="info_support">
+                        <div class="support_img"></div>
+                        <span>在线支付满28减30,满50送店</span>
+                    </div>
+                </div>
+                <div class="content_btn">
+                    <span>5个</span>
+                    <span class="icon-anniu-jiantouxiangyou iconfont arrows "></span>
+                </div>
+            </div>
+            <div class="notice">
+                <div class="notice_img"></div>
+                <span class="notice_text">是以粥为特色的中式营养快餐，自2004年10月18日创立“嘉和一品”品牌至今，不断优化管理，积极创新，立足于“贴近百姓生活，服务千家万户</span>
+                <span class="notice_arrows icon-anniu-jiantouxiangyou iconfont"></span>
+            </div>
+            <div class="bg"></div>
+            <div class="mask">
+                <div class="mask_content">
+                    <div class="title">粥品香坊(大运村)</div>
+                    <div class="stars">
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                    <div class="info">
+                        <div class="line"></div>
+                        <div class="text">优惠信息</div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="supports">
+                        <div class="support">
+                            <div class="support_img"></div>
+                            <span>在线支付满28减30,满50送店</span>
+                        </div>
+                        <div class="support">
+                            <div class="support_img"></div>
+                            <span>单人套餐</span>
+                        </div>
+                        <div class="support">
+                            <div class="support_img"></div>
+                            <span>清肺雪梨汤8折抢购</span>
+                        </div>
+                        <div class="support">
+                            <div class="support_img"></div>
+                            <span>特价饮品8折抢购</span>
+                        </div>
+                        <div class="support">
+                            <div class="support_img"></div>
+                            <span>单人特色套餐</span>
+                        </div>
+                    </div>
+
+                    <div class="info">
+                        <div class="line"></div>
+                        <div class="text">商家公告</div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="notice">
+                        在中国有文字记载的历史中，粥的踪影伴随始终。关于粥的文字，最早见于周书：黄帝始烹谷为粥。
+                        中国的粥在四千年前主要为食用，2500年前始作药用，《史记》扁鹊仓公列传载有西汉名医淳于意（仓公）用“火齐粥”治齐王病；汉代医圣张仲景《伤寒论》述：桂枝汤，服已须臾，啜热稀粥一升余，以助药力，便是有力例证。
+                        进入中古时期，粥的功能更是将“食用”、“药用”高度融合，进入了带有人文色彩的“养生”层次。
+                        宋代苏东坡有书帖曰：夜饥甚，吴子野劝食白粥，云能推陈致新，利膈益胃。粥既快美，粥后一觉，妙不可言。南宋著名诗人陆游也极力推荐食粥养生，认为能延年益寿，曾作《粥食》诗一首：“世人个个学长年，不悟长年在目前，我得宛丘平易法，只将食粥致神仙。”从而将世人对粥的认识提高到了一个新的境界。
+                        可见，粥与中国人的关系，正像粥本身一样，稠粘绵密，相濡以沫；粥作为一种传统食品，在中国人心中的地位更是超过了世界上任何一个民族。
+                        腊八粥
+                        腊八粥是一种在腊八节用由多种食材熬制的粥，也叫做七宝五味粥。腊八粥传说来自印度天竺，农历十二月初八是佛陀成道纪念日，俗称“腊八节”，在佛教称“法宝节”。腊八粥的习俗，已非佛门所有，作为一种民间风俗，农历十二月八日吃腊八粥，用以庆祝丰收，一直流传至今。最早的腊八粥是红小豆来煮，后经演变，加之地方特色，逐渐丰富多彩起来。
+                    </div>
+                </div>
+                <div class="mask_close">
+                    <span class="icon-guanbi1 iconfont close"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 导航 -->
+        <div class="navs">
+            <div class="goods" style="color: rgba(240, 20, 20);">商品</div>
+            <div class="ratings">评价</div>
+            <div class="shop">商家</div>
+        </div>
+
+        <!-- 主体内容 -->
+		<!-- 绝对定位的元素的top + bottom + height + margin + padding + border = 其包含块padding-box的高度 -->
+        <div class="main">
+            <div class="goods">
+            <div class="left">
+              <ul class="list">
+                <li class="item">
+                  <div class="center">
+                    <span>热销榜</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span class="support_img"></span>
+                    <span>单人优惠套餐</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>特色粥品</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>精选热菜</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>爽口凉菜</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>半成品</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>小吃</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>饮品</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>折扣</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>小料</span>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="center">
+                    <span>店长推荐</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="right">
+              <ul class="list">
+                <li class="item">
+                  <div class="title">
+                    <span class="line"></span>
+                    <span class="content">特色粥品</span>
+                  </div>
+                  <div class="info">
+                    <div class="icon"></div>
+                    <div class="content">
+                      <span>雪梨银耳百合粥</span>	
+                      <span>齁甜齁甜</span>
+                      <span>月售10000份    好评率100%</span>
+                      <span>
+                        <span class="new">￥24</span>
+                        <span class="old">￥28</span>
+                      </span>
+                    </div>
+                    <div class="btns">
+                      <span class="iconfont icon-jianshao"></span>
+                      <span class="mun">10</span>
+                      <span class="iconfont icon-jia"></span>
+                    </div>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="title">
+                    <span class="line"></span>
+                    <span class="content">特色粥品</span>
+                  </div>
+                  <div class="info">
+                    <div class="icon"></div>
+                    <div class="content">
+                      <span>雪梨银耳百合粥</span>	
+                      <span>齁甜齁甜</span>
+                      <span>月售10000份    好评率100%</span>
+                      <span>
+                        <span class="new">￥24</span>
+                        <span class="old">￥28</span>
+                      </span>
+                    </div>
+                    <div class="btns">
+                      <span class="iconfont icon-jianshao"></span>
+                      <span class="mun">10</span>
+                      <span class="iconfont icon-jia"></span>
+                    </div>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="title">
+                    <span class="line"></span>
+                    <span class="content">特色粥品</span>
+                  </div>
+                  <div class="info">
+                    <div class="icon"></div>
+                    <div class="content">
+                      <span>雪梨银耳百合粥</span>	
+                      <span>齁甜齁甜</span>
+                      <span>月售10000份    好评率100%</span>
+                      <span>
+                        <span class="new">￥24</span>
+                        <span class="old">￥28</span>
+                      </span>
+                    </div>
+                    <div class="btns">
+                      <span class="iconfont icon-jianshao"></span>
+                      <span class="mun">10</span>
+                      <span class="iconfont icon-jia"></span>
+                    </div>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="title">
+                    <span class="line"></span>
+                    <span class="content">特色粥品</span>
+                  </div>
+                  <div class="info">
+                    <div class="icon"></div>
+                    <div class="content">
+                      <span>雪梨银耳百合粥</span>	
+                      <span>齁甜齁甜</span>
+                      <span>月售10000份    好评率100%</span>
+                      <span>
+                        <span class="new">￥24</span>
+                        <span class="old">￥28</span>
+                      </span>
+                    </div>
+                    <div class="btns">
+                      <span class="iconfont icon-jianshao"></span>
+                      <span class="mun">10</span>
+                      <span class="iconfont icon-jia"></span>
+                    </div>
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="title">
+                    <span class="line"></span>
+                    <span class="content">特色粥品</span>
+                  </div>
+                  <div class="info">
+                    <div class="icon"></div>
+                    <div class="content">
+                      <span>雪梨银耳百合粥</span>	
+                      <span>齁甜齁甜</span>
+                      <span>月售10000份    好评率100%</span>
+                      <span>
+                        <span class="new">￥24</span>
+                        <span class="old">￥28</span>
+                      </span>
+                    </div>
+                    <div class="btns">
+                      <span class="iconfont icon-jianshao"></span>
+                      <span class="mun">10</span>
+                      <span class="iconfont icon-jia"></span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+            <div class="ratings" style="display: none;">
+              <div class="top">
+                <div class="left">
+                  <span>3.9</span>
+                  <span>综合评分</span>
+                  <span>高于周边商家99.2%</span>
+                </div>
+                <div class="right">
+                  <div>
+                    <span>服务态度</span>
+                    <span class="stars">
+                      <span class="star"></span>
+                      <span class="star"></span>
+                      <span class="star"></span>
+                      <span class="star"></span>
+                      <span class="star"></span>
+                    </span>
+                    <span>3.9</span>
+                  </div>
+                  <div>
+                    <span>服务态度</span>
+                    <span class="stars">
+                      <span class="star"></span>
+                      <span class="star"></span>
+                      <span class="star"></span>
+                      <span class="star"></span>
+                      <span class="star"></span>
+                  </span>
+                    <span>4.0</span>
+                  </div>
+                  <div>
+                    <span id="time">送达时间</span>
+                    <span>33分钟</span>
+                  </div>
+                </div>
+              </div>
+              <div class="center">
+                <div class="top"></div>
+                <div class="bottom">
+                  <div>
+                    <span>全部57</span>
+                    <span>满意47</span>
+                    <span>不满意10</span>
+                  </div>
+                  <div>只看有内容的评价</div>
+                </div>
+              </div>
+              <div class="bottom">
+                <div class="ul">
+                  <div class="pinglun">
+                    <div class="img"></div>
+                    <div class="rightcontent">
+                      <div class="time">
+                        <span>张三</span>
+                        <span>2023-04-23 19:20</span>
+                      </div>
+                      <div class="stars">
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="font">80分钟送达</span>
+                      </div>
+                      <div class="content">油条凉了,而且没有酱。75分钟才到。很慢。送餐员态度不错,但毕竟好晚了啊。
+                        </div>
+                      <div class="dianzan">
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pinglun">
+                    <div class="img"></div>
+                    <div class="rightcontent">
+                      <div class="time">
+                        <span>张三</span>
+                        <span>2023-04-23 19:20</span>
+                      </div>
+                      <div class="stars">
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="font">80分钟送达</span>
+                      </div>
+                      <div class="content">油条凉了,而且没有酱。75分钟才到。很慢。送餐员态度不错,但毕竟好晚了啊。
+                        </div>
+                      <div class="dianzan">
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pinglun">
+                    <div class="img"></div>
+                    <div class="rightcontent">
+                      <div class="time">
+                        <span>张三</span>
+                        <span>2023-04-23 19:20</span>
+                      </div>
+                      <div class="stars">
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="font">80分钟送达</span>
+                      </div>
+                      <div class="content">油条凉了,而且没有酱。75分钟才到。很慢。送餐员态度不错,但毕竟好晚了啊。
+                        </div>
+                      <div class="dianzan">
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pinglun">
+                    <div class="img"></div>
+                    <div class="rightcontent">
+                      <div class="time">
+                        <span>张三</span>
+                        <span>2023-04-23 19:20</span>
+                      </div>
+                      <div class="stars">
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="font">80分钟送达</span>
+                      </div>
+                      <div class="content">油条凉了,而且没有酱。75分钟才到。很慢。送餐员态度不错,但毕竟好晚了啊。
+                        </div>
+                      <div class="dianzan">
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pinglun">
+                    <div class="img"></div>
+                    <div class="rightcontent">
+                      <div class="time">
+                        <span>张三</span>
+                        <span>2023-04-23 19:20</span>
+                      </div>
+                      <div class="stars">
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                        <span class="font">80分钟送达</span>
+                      </div>
+                      <div class="content">油条凉了,而且没有酱。75分钟才到。很慢。送餐员态度不错,但毕竟好晚了啊。
+                        </div>
+                      <div class="dianzan">
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                        <span>香菇卤肉饭</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="shop" style="display: none;">
+              <ul>
+                <li class="title">
+                    <div class="bigtop">
+                      <div class="smalltop">
+                        <div class="left">
+                        <div>粥品香坊（大运村）</div>
+                        <span class="stars">
+                          <span class="star"></span>
+                          <span class="star"></span>
+                          <span class="star"></span>
+                          <span class="star"></span>
+                          <span class="star"></span>
+                          <span>(661) </span>
+                          <span> 月售690单</span>
+                        </span>
+                        </div>
+                        <div class="right">
+                          <div>♥</div>
+                          <div>已收藏</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bottom">
+                      <div class="item">
+                        <div>起送价</div>
+                        <div>20元</div>
+                      </div>
+                      <div class="item">
+                        <div>商家配送</div>
+                        <div>4元</div>
+                      </div>
+                      <div class="item">
+                        <div>平均配送时间</div>
+                        <div>39分钟</div>
+                      </div>
+                    </div>
+                </li>
+                <li class="gonggao">
+                  <div class="hengfu"></div>
+                  <div class="content">
+                    <div class="hengfutitle">公告与活动</div>
+                    <div>粥品香坊其烹饪粥料的秘方源于中国千年古法,在融和现代制作工艺,由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深的消费者青睐,发展至今成为粥类弓|领品牌。是2008年 奥运会和2013年园博会指定餐饮服务商。
+                    </div>
+                    <div class="supports">
+                      <div class="support">
+                        <div class="support_img"></div>
+                        <span>在线支付满28减30,满50送店</span>
+                      </div>
+                      <div class="support">
+                        <div class="support_img"></div>
+                        <span>单人套餐</span>
+                      </div>
+                      <div class="support">
+                          <div class="support_img"></div>
+                          <span>清肺雪梨汤8折抢购</span>
+                      </div>
+                      <div class="support">
+                          <div class="support_img"></div>
+                          <span>特价饮品8折抢购</span>
+                      </div>
+                      <div class="support">
+                          <div class="support_img"></div>
+                          <span>单人特色套餐</span>
+                      </div>
+                      <div class="support">
+                          <div class="support_img"></div>
+                          <span>特价饮品8折抢购</span>
+                      </div>
+                      <div class="support">
+                          <div class="support_img"></div>
+                          <span>特价饮品8折抢购</span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="shijing">
+                  <div class="hengfu"></div>
+                  <div class="content">
+                    <div class="hengfutitle">商家实景</div>
+                    <span></span>
+                  </div>
+                </li>
+                <li class="message">
+                  <div class="hengfu"></div>
+                  <div class="content">
+                    <div class="hengfutitle">商家信息</div>
+                    <span>该商家支持开发票,请在下单时填写好发票抬头</span>
+                    <span>品类:其他菜系、包子粥店</span>
+                    <span>地址:北京市昌平区回龙观西大街龙观置业大厦底座B座102单元13楼1340</span>
+                    <span>营业时间: 10:00 - 20:30</span>
+                  </div>
+                </li>
+              </ul>
+			      </div>
+          </div>
+
+        <!-- 购物车 -->
+        <div class="cart">
+            <div class="left">
+                <span>￥0</span>
+                <div class="line"></div>
+                <span class="delivery">另需配送费￥4元</span>
+                <!-- 购物车的圆形图标 -->
+                <div class="cart_icon">
+                    <!-- 小圆 -->
+                    <div class="cart_icon_small selected">
+                        <span class="iconfont icon-gouwucheman gouwucheman"></span>
+                    </div>
+                    <!-- 气泡 -->
+                    <div class="biubiubiu">99</div>
+                </div>
+            </div>
+            <div class="right">
+                <span>￥20起送</span>
+            </div>
+		    </div>
+		
+		<!-- 购物车明细 -->
+		<div class="cart_mask">
+			<div class="content">
+				<div class="title">
+					<span class="gwc">购物车</span>
+					<span class="qk">清空</span>
+				</div>
+				<div class="scroll">
+					<ul class="items">
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+						<li class="item">
+							<span class="name">莲子核桃黑米粥</span>
+							<div class="tools">
+								<span class="rmb">￥10</span>
+								<span class="iconfont icon-jianshao"></span>
+								<span class="mun">10</span>
+								<span class="iconfont icon-jia"></span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+    </div>
+</body>
+</html>

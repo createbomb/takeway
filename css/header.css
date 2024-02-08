@@ -1,0 +1,30 @@
+/* 
+    头部内容区的样式
+    头部公告区的样式 
+    头部遮罩区的样式
+*/
+@import './header_content.css';
+@import "./header_notice.css";
+@import "./header_mask.css";
+/* 头部容器样式 */
+.header{
+    width: 100%;
+    height: 134px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+/* 头部背景的样式  */
+.header > .bg{
+    width: 100%;
+    height: 100%;
+    /* 让一个元素生产模糊 */
+    filter: blur(7px);
+    background-image:url("https://fuss10.elemecdn.com/f/5c/ead54394c3de198d3e6d3e9111bbfpng.png") ;
+    background-size: 100% 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
